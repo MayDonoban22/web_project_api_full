@@ -1,91 +1,97 @@
+import { getToken } from "./token";
 
 export default class Api {
     constructor(baseUrl, headers) {
         this.baseUrl = baseUrl;
         this.headers = headers;
     }
+
+    _handleResponse(response) {
+        console.log(response)
+        return response.ok
+            ? response.json().then((data) => data.data || data) // Extrae data si existe
+            : Promise.reject("Error en la solicitud");
+    }
     getUsers() {
         return fetch(`${this.baseUrl}users/me`, {
             method: "GET",
-            headers: this.headers,
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
+        }).then(this._handleResponse);
     }
     getCards() {
         return fetch(`${this.baseUrl}cards`, {
             method: "GET",
-            headers: this.headers,
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
+        }).then(this._handleResponse);
     }
     editUser(name, about) {
         return fetch(`${this.baseUrl}users/me`, {
             method: "PATCH",
-            headers: this.headers,
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
             body: JSON.stringify({
                 name,
                 about,
             }),
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+        }).then(this._handleResponse);
     }
     createCard(card) {
         return fetch(`${this.baseUrl}cards`, {
             method: "POST",
-            headers: this.headers,
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
             body: JSON.stringify({
                 name: card.name,
                 link: card.link,
             }),
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+        }).then(this._handleResponse);
     }
 
     changeLikeCardStatus(cardId, isLiked) {
         const method = isLiked ? "DELETE" : "PUT";
         return fetch(`${this.baseUrl}cards/${cardId}/likes`, {
             method: method,
-            headers: this.headers,
-            body: JSON.stringify(),
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
         })
-            .then((response) => {
-                if (response.ok) return response.json();
-                return Promise.reject("Error en la solicitud");
-            });
+            .then(this._handleResponse);
     }
 
     deleteCard(cardId) {
         return fetch(`${this.baseUrl}cards/${cardId}`, {
             method: "DELETE",
-            headers: this.headers,
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
+        }).then(this._handleResponse);
     }
     editAvatar(data) {
         return fetch(`${this.baseUrl}users/me/avatar`, {
             method: "PATCH",
-            headers: this.headers,
+            headers: {
+                ...this.headers,
+                authorization: getToken(),
+            },
             body: JSON.stringify({
                 avatar: data.avatar,
             }),
-        }).then((response) => {
-            if (response.ok) return response.json();
-            return Promise.reject("Error en la solicitud");
-        });
+        }).then(this._handleResponse);
     }
 }
-export const api = new Api("https://around-api.es.tripleten-services.com/v1/", {
-    authorization: "11107250-1ed5-4df7-8f20-016f79a12822",
+export const api = new Api("http://localhost:3000/", {
     "Content-Type": "application/json",
 });
 

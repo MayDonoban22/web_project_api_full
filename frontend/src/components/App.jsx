@@ -30,6 +30,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
+  const [jwt, setJwt] = useState(getToken());
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -59,7 +60,7 @@ function App() {
       .then(([userData, userEmailData, cardsData]) => {
         setIsLoggedIn(true);
         setCurrentUser(userData);
-        setUserData({ email: userEmailData.data.email });
+        setUserData({ email: userData.email });
         setuserName(userData.name);
         setUserDescription(userData.about);
         setUserAvatar(userData.avatar);
@@ -76,10 +77,11 @@ function App() {
   };
 
   useEffect(() => {
-    const jwt = getToken();
-    if (!jwt) return;
-    fetchUserData(jwt, true);
-  }, []);
+    const localToken = getToken();
+    if (!localToken) return;
+
+    fetchUserData(localToken, true);
+  }, [jwt]);
 
   const handleLogin = ({ email, password }) => {
     if (!email || !password) return;
@@ -89,6 +91,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           setToken(data.token);
+          setJwt(data.token);
           fetchUserData(data.token, true);
         }
       })
@@ -102,12 +105,12 @@ function App() {
     setIsLoggedIn(false);
 
     setToken(null);
+    setJwt(null);
     setCurrentUser(null);
     setUserData({ email: "" });
     setuserName("");
     setUserDescription("");
     setUserAvatar("");
-
     setCards(null);
     removeToken();
     const redirectPath = location.state?.from?.pathname || "/login";
@@ -115,15 +118,17 @@ function App() {
   };
 
   async function handleCardLike(card) {
-    const isLiked = card.isLiked;
-    console.log(isLiked);
+    const isLiked =
+      card.likes && card.likes.some((id) => id === currentUser._id);
+    // console.log(isLiked);
 
     await api
-      .changeLikeCardStatus(card._id, card.isLiked)
+      .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
+        console.log(newCard, card);
         setCards((state) =>
           state.map((currentCard) =>
-            currentCard._id === card._id ? newCard : currentCard
+            currentCard._id === card._id ? newCard.card : currentCard
           )
         );
       })
@@ -133,9 +138,9 @@ function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards((state) =>
-          state.filter((currentCard) => currentCard._id !== card._id)
-        );
+        setCards((state) => {
+          return state.filter((currentCard) => currentCard._id !== card._id);
+        });
       })
       .catch((error) => {
         console.error("Error al eliminar la tarjeta:", error);

@@ -3,7 +3,7 @@ const Card = require('../models/card.js')
 
 async function createCard(req, res) {
   const { name, link } = req.body;
-  const userId = '677c46b1b6e81c32a3d26415';
+  const userId = req.user.userId;
 
   if (!name || !link) {
     return res.status(400).send({ message: 'Nombre y link son obligatorios' });
@@ -25,9 +25,7 @@ async function createCard(req, res) {
 
 async function getCards(req, res) {
   try {
-    const cards = await Card.find().populate('owner').orFail((err) => {
-      throw new NotFoundError('Usuario no encontrado');
-    });
+    const cards = await Card.find()
     res.json(cards);
   } catch (err) {
     console.error('Error al obtener usuarios:', err);
@@ -41,10 +39,14 @@ async function deleteCardById(req, res) {
     if (cardId == undefined) {
       throw new ValidationError('El id de la carta no existe');
     }
-    await Card.findByIdAndDelete(cardId).orFail((err) => {
-      throw new NotFoundError('Usuario no encontrado');
+    const card = await Card.findById(cardId).orFail(() => {
+      throw new NotFoundError('Tarjeta no encontrada');
     });
-    res.status(204).send();
+    if (card.owner.toString() !== req.user.userId) {
+      return res.status(403).json({ message: 'No tienes permiso para eliminar esta tarjeta' });
+    }
+    await Card.findByIdAndDelete(cardId);
+    res.status(200).send({ message: 'Carta eliminada' });
   } catch (err) {
     console.error(err);
     res.status(err.statusCode || 500).send({ message: err.message });
@@ -55,7 +57,8 @@ async function likeCard(req, res) {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $addToSet: { likes: req.user._id } },
+      { $addToSet: { likes: req.user.userId } },
+
       { new: true }
     );
 
@@ -74,7 +77,7 @@ async function dislikeCard(req, res) {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $pull: { likes: req.user._id } },
+      { $pull: { likes: req.user.userId } },
       { new: true }
     );
 

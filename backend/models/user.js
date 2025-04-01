@@ -19,13 +19,14 @@ const userSchema = new mongoose.Schema({
     default: 'https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg',
     validate: {
       validator: function (v) {
-        const regex = /^https?:\/\/(www.)?[a-zA-Z0-9.-]+.[a-zA-Z](\/)?[._~:/?%#\[\]@!\$&'\(\)\*\+,;=a-zA-Z0-9]*/
-        return regex.test(v);
+        return validator.isURL(v, {
+          protocols: ['http', 'https'],
+          require_protocol: true,
+          require_valid_protocol: true,
+        });
       },
-
       message: props => `${props.value} no es una URL válida!`
     },
-
   },
   email: {
     type: String,
@@ -39,6 +40,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false,
   },
 })
 

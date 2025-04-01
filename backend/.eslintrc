@@ -3,7 +3,9 @@
     "rules":{
       "no-underscore-dangle": "off",
       "no-console": 0,
-      "linebreak-style": ["warning", "unix"]
+      "linebreak-style": ["warning", "unix"],
+      "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
+
+  }
+  }
   
-  }
-  }
