@@ -30,12 +30,14 @@ function Card(props) {
       className="content__element content__element-template"
       id="card-element"
     >
-      <img
-        onClick={handleClick}
-        src={props.card.link}
-        alt="Places"
-        className="content__element-picture"
-      />
+      <div className="content__space-image">
+        <img
+          onClick={handleClick}
+          src={props.card.link}
+          alt="Places"
+          className="content__element-picture"
+        />
+      </div>
       <div className="content__description">
         <p className="content__description-text">{props.card.name}</p>
         <div className="content__likes">

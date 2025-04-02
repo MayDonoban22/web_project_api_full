@@ -152,8 +152,14 @@
   align-items: center;
 }
 
+.content__space-image {
+  width: 282px;
+  height: 282px;
+  background-color: #999595;
+}
+
 .content__description-text {
-  color: #000000;
+  color: #000;
   font-weight: bold;
   text-align: justify;
   font-size: 24px;
