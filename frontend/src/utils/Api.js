@@ -91,7 +91,7 @@ export default class Api {
         }).then(this._handleResponse);
     }
 }
-export const api = new Api("http://localhost:3000/", {
+export const api = new Api("https://http://api.aroundcol.chickenkiller.com", {
     "Content-Type": "application/json",
 });
 
