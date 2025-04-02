@@ -4,7 +4,7 @@ import Popup from "../Popup";
 
 export default function EditProfile(props) {
   const userContext = useContext(CurrentUserContext);
-  const { currentUser, handleUpdateUser } = userContext;
+  const { currentUser } = userContext;
 
   const [name, setName] = useState(currentUser?.name || "May Donoban Espitia");
   const [description, setDescription] = useState(

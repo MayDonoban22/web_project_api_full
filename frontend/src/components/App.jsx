@@ -120,7 +120,6 @@ function App() {
   async function handleCardLike(card) {
     const isLiked =
       card.likes && card.likes.some((id) => id === currentUser._id);
-    // console.log(isLiked);
 
     await api
       .changeLikeCardStatus(card._id, isLiked)
