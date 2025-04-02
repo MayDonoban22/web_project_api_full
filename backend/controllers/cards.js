@@ -1,7 +1,8 @@
 const { NotFoundError, ValidationError } = require('../errors/error.js');
-const Card = require('../models/card.js')
+const Card = require('../models/card.js');
+const { logger } = require('../middlewares/errorHandler');
 
-async function createCard(req, res) {
+async function createCard(req, res, next) {
   const { name, link } = req.body;
   const userId = req.user.userId;
 
@@ -15,25 +16,27 @@ async function createCard(req, res) {
       link,
       owner: userId,
     });
+    logger.info(`Nueva tarjeta creada por usuario ${userId}`);
     res.status(201).json(newCard);
   } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: 'Error al crear la tarjeta' });
+    logger.error(`Error al crear tarjeta: ${err.message}`);
+    next(err);
   }
 
 }
 
-async function getCards(req, res) {
+async function getCards(req, res, next) {
   try {
     const cards = await Card.find()
+    logger.info(`Se consultaron todas las tarjetas`);
     res.json(cards);
   } catch (err) {
-    console.error('Error al obtener usuarios:', err);
-    res.status(err.statusCode || 500).send({ message: err.message });
+    logger.error(`Error al obtener tarjetas: ${err.message}`);
+    next(err);
   }
 }
 
-async function deleteCardById(req, res) {
+async function deleteCardById(req, res, next) {
   const { cardId } = req.params;
   try {
     if (cardId == undefined) {
@@ -43,17 +46,19 @@ async function deleteCardById(req, res) {
       throw new NotFoundError('Tarjeta no encontrada');
     });
     if (card.owner.toString() !== req.user.userId) {
+      logger.warn(`Usuario ${req.user.userId} intentó eliminar una tarjeta que no le pertenece`);
       return res.status(403).json({ message: 'No tienes permiso para eliminar esta tarjeta' });
     }
     await Card.findByIdAndDelete(cardId);
+    logger.info(`Tarjeta ${cardId} eliminada por usuario ${req.user.userId}`);
     res.status(200).send({ message: 'Carta eliminada' });
   } catch (err) {
-    console.error(err);
-    res.status(err.statusCode || 500).send({ message: err.message });
+    logger.error(`Error al eliminar tarjeta: ${err.message}`);
+    next(err);
   }
 }
 
-async function likeCard(req, res) {
+async function likeCard(req, res, next) {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -65,15 +70,15 @@ async function likeCard(req, res) {
     if (!card) {
       throw new ValidationError('Tarjeta no encontrada');
     }
-
+    logger.info(`Usuario ${req.user.userId} dio like a la tarjeta ${req.params.cardId}`);
     res.status(200).json({ message: 'Like registrado correctamente', card });
   } catch (err) {
-    console.error('Error al dar like:', err);
-    res.status(err.statusCode || 500).json({ message: err.message });
+    logger.error(`Error al dar like a tarjeta: ${err.message}`);
+    next(err);
   }
 }
 
-async function dislikeCard(req, res) {
+async function dislikeCard(req, res, next) {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -85,10 +90,11 @@ async function dislikeCard(req, res) {
       throw new ValidationError('Tarjeta no encontrada');
     }
 
+    logger.info(`Usuario ${req.user.userId} quitó like a la tarjeta ${req.params.cardId}`);
     res.status(200).json({ message: 'Like removido correctamente', card });
   } catch (err) {
-    console.error('Error al dar dislike:', err);
-    res.status(err.statusCode || 500).json({ message: err.message });
+    logger.error(`Error al quitar like a tarjeta: ${err.message}`);
+    next(err);
   }
 }
 

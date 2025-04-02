@@ -6,16 +6,15 @@ const { errors } = require('celebrate');
 const usersRoutes = require('./routes/users.js');
 const cardsRoutes = require('./routes/cards.js');
 const { login, createUser } = require('./controllers/users.js');
-const errorHandler = require('./middlewares/errorHandler');
-const {
-  validateSignin,
-  validateSignup,
-} = require('./middlewares/validations');
+const { logRequest, errorHandler } = require('./middlewares/errorHandler');
+const { validateSignin, validateSignup } = require('./middlewares/validations');
+
 require('dotenv').config()
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
 mongoose.connect(`mongodb://127.0.0.1:27017/${DB_AROUND}`).then(() => { //direccion IP requerible
