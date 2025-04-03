@@ -30,7 +30,7 @@ function Card(props) {
       className="content__element content__element-template"
       id="card-element"
     >
-      <div className="content__space-image">
+      <div className="content__place-image">
         <img
           onClick={handleClick}
           src={props.card.link}
