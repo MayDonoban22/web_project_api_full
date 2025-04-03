@@ -91,7 +91,7 @@ export default class Api {
         }).then(this._handleResponse);
     }
 }
-export const api = new Api("https://api.aroundcol.chickenkiller.com", {
+export const api = new Api("https://api.aroundcol.chickenkiller.com/", {
     "Content-Type": "application/json",
 });
 
