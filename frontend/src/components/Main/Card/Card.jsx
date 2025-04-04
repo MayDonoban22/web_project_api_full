@@ -16,7 +16,6 @@ function Card(props) {
   const cardLikeButtonClassName = `content__description-like ${
     isLiked ? "content__description-like-focus" : ""
   }`;
-  console.log(props.card);
   function handleLike() {
     props.onLikeClick(props.card);
   }

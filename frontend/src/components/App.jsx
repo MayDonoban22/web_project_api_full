@@ -36,7 +36,6 @@ function App() {
   const location = useLocation();
 
   const handleRegistration = ({ email, password }) => {
-    console.log(email, password);
     if (password) {
       auth
         .register(password, email)
@@ -124,7 +123,6 @@ function App() {
     await api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
-        console.log(newCard, card);
         setCards((state) =>
           state.map((currentCard) =>
             currentCard._id === card._id ? newCard.card : currentCard

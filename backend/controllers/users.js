@@ -60,7 +60,6 @@ async function getUsers(req, res, next) {
 }
 
 async function getUsersId(req, res, next) {
-  console.log(req.params)
   try {
     const findUser = await User.findById(req.user.userId).orFail((err) => {
       throw new NotFoundError('Usuario no encontrado');

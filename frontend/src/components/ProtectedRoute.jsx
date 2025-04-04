@@ -6,7 +6,6 @@ function ProtectedRoute({ children }) {
   const location = useLocation();
 
   const { isLoggedIn } = useContext(CurrentUserContext);
-  console.log(isLoggedIn);
   if (isLoggedIn) {
     return children;
   } else {

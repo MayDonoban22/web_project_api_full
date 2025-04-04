@@ -7,7 +7,6 @@ export default class Api {
     }
 
     _handleResponse(response) {
-        console.log(response)
         return response.ok
             ? response.json().then((data) => data.data || data) // Extrae data si existe
             : Promise.reject("Error en la solicitud");
