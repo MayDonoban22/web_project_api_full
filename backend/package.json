@@ -2,7 +2,7 @@
   "name": "web_project_around_express",
   "version": "1.0.0",
   "description": "Backend Around express",
-  "main": "index.js",
+  "main": "app.js",
   "type": "commonjs",
   "scripts": {
     "test": "jest",
