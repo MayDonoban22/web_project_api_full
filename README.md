@@ -108,7 +108,7 @@ This project is a full-stack web application that provides a platform for users 
 
 ## License
 
-This project is licensed under the ISC License.
+This project islicensed under the ISC License.
 
 ---
 
