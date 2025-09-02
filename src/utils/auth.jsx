@@ -1,4 +1,4 @@
-export const BASE_URL = "https://api.aroundcol.chickenkiller.com";
+export const BASE_URL = "https://webprojectapifull-production.up.railway.app";
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {

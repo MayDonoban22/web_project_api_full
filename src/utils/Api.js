@@ -90,7 +90,7 @@ export default class Api {
         }).then(this._handleResponse);
     }
 }
-export const api = new Api("https://api.aroundcol.chickenkiller.com/", {
+export const api = new Api("https://webprojectapifull-production.up.railway.app/", {
     "Content-Type": "application/json",
 });
 
