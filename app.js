@@ -19,7 +19,7 @@ app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
 const mongoURI = process.env.MONGO_URL;
-mongoose.connect(`mongodb://${encodeURIComponent(mongoURI)}/${DB_AROUND}`, {
+mongoose.connect(`${encodeURIComponent(mongoURI)}/${DB_AROUND}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => { //direccion IP requerible
