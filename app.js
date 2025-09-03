@@ -18,7 +18,10 @@ app.options('*', cors());
 app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
-mongoose.connect(`mongodb://mongo:AmaIyNGPTIfkWNuzpYlsAJJdkHndZChg@mongodb.railway.internal:27017/${DB_AROUND}`).then(() => { //direccion IP requerible
+mongoose.connect(`mongodb://mongo:AmaIyNGPTIfkWNuzpYlsAJJdkHndZChg@mongodb.railway.internal:27017/${DB_AROUND}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => { //direccion IP requerible
   console.log('Connected to MongoDB');
 })
   .catch((err) => {
