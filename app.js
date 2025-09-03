@@ -18,7 +18,7 @@ app.options('*', cors());
 app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
-mongoose.connect(`mongodb+srv://md_espitia_22:Mdonoban1022@cluster0.equqobk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/${DB_AROUND}`).then(() => { //direccion IP requerible
+mongoose.connect(`mongodb://mongo:AmaIyNGPTIfkWNuzpYlsAJJdkHndZChg@mongodb.railway.internal:27017/${DB_AROUND}`).then(() => { //direccion IP requerible
   console.log('Connected to MongoDB');
 })
   .catch((err) => {
