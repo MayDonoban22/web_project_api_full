@@ -18,7 +18,8 @@ app.options('*', cors());
 app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
-mongoose.connect(`mongodb://mongo:AmaIyNGPTIfkWNuzpYlsAJJdkHndZChg@mongodb.railway.internal:27017/${DB_AROUND}`, {
+const mongoURI = process.env.MONGO_URL;
+mongoose.connect(`${mongoURI}/${DB_AROUND}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => { //direccion IP requerible
