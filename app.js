@@ -21,7 +21,7 @@ const DB_AROUND = process.env.DB_AROUND || 'arounddb';
 const MONGOHOST = process.env.MONGOHOST;
 const MONGOUSER = process.env.MONGOUSER;
 const MONGOPASSWORD = process.env.MONGOPASSWORD;
-mongoose.connect(`mongodb://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}/${DB_AROUND}?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}:27017/${DB_AROUND}?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => { //direccion IP requerible
@@ -47,6 +47,6 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}...`);
-  console.log(`mongodb://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}/${DB_AROUND}?retryWrites=true&w=majority`);
+  console.log(`mongodb://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}:27017//${DB_AROUND}?retryWrites=true&w=majority`);
 });
 module.exports = app;
