@@ -47,5 +47,6 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}...`);
+  console.log(`mongodb://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}/${DB_AROUND}?retryWrites=true&w=majority`);
 });
 module.exports = app;
