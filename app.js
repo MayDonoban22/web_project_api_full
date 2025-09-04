@@ -18,8 +18,10 @@ app.options('*', cors());
 app.use(logRequest);
 
 const DB_AROUND = process.env.DB_AROUND || 'arounddb';
-const mongoURI = process.env.MONGO_URL;
-mongoose.connect(`mongodb://${encodeURIComponent(mongoURI)}/${DB_AROUND}`, {
+const MONGOHOST = process.env.MONGOHOST;
+const MONGOUSER = process.env.MONGOUSER;
+const MONGOPASSWORD = process.env.MONGOPASSWORD;
+mongoose.connect(`mongodb+srv://${MONGOUSER}:${MONGOPASSWORD}@${MONGOHOST}/${DB_AROUND}?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => { //direccion IP requerible
